@@ -3,6 +3,7 @@ package com.larusx.yike;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.common.io.CharSink;
+import com.google.common.io.FileWriteMode;
 import com.google.common.io.Files;
 
 import java.io.File;
@@ -16,7 +17,7 @@ public class Remember {
 
     private CharSink charSink;
 
-    private ReentrantLock lock;
+    private ReentrantLock lock = new ReentrantLock();
 
     private Set<String> lines;
 
@@ -32,8 +33,9 @@ public class Remember {
                 e.printStackTrace();
             }
         }
+        this.charSink = Files.asCharSink(file, Charset.defaultCharset(), FileWriteMode.APPEND);
         try {
-            this.lines = Sets.newHashSet(Files.readLines(new File(filePath), Charset.defaultCharset()));
+            this.lines = Sets.newHashSet(Files.readLines(file, Charset.defaultCharset()));
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -50,9 +50,13 @@ public class CursorTraverser {
     }
 
     public void traverse() throws IOException {
-        JSONObject scrollResult = httpAgent.doRequestAndParse(URLUtils.addBstoken(traverseUrl, bdstoken));
         int count = 0;
         while (hasMore) {
+            String url = URLUtils.addBstoken(traverseUrl, bdstoken);
+            if (cursor != null) {
+                url = URLUtils.addCursor(url, cursor);
+            }
+            JSONObject scrollResult = httpAgent.doRequestAndParse(url);
             cursor = scrollResult.getStr("cursor");
             hasMore = scrollResult.getInt("has_more") == 1;
             JSONArray scrollList = scrollResult.getJSONArray("list");
@@ -77,11 +81,11 @@ public class CursorTraverser {
     private void fetchAndDownload(String fsid) {
         try {
             String downloadUrl = downloader.fetchDownloadUrl(fsid);
-            if(downloadUrl == null) {
+            if (downloadUrl == null) {
                 errorRemember.add(fsid);
             } else {
-                downloadExecutorService.execute(() ->{
-                   download(fsid, downloadUrl);
+                downloadExecutorService.execute(() -> {
+                    download(fsid, downloadUrl);
                 });
             }
         } catch (IOException e) {
