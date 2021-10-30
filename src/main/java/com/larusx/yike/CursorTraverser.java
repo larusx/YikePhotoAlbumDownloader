@@ -57,31 +57,44 @@ public class CursorTraverser {
             hasMore = scrollResult.getInt("has_more") == 1;
             JSONArray scrollList = scrollResult.getJSONArray("list");
             for (Object item : scrollList) {
-                JSONObject file = JSONUtil.parseObj(item);
-                String fsid = file.getStr("fsid");
-                if (!remember.hasRemember(fsid)) {
-                    fetchDownloadUrlExecutorService.execute(() -> {
-                        try {
-                            String downloadUrl = downloader.fetchDownloadUrl(fsid);
-                            if(downloadUrl == null) {
-                                errorRemember.add(fsid);
-                            } else {
-                                downloadExecutorService.execute(() ->{
-                                    try {
-                                        downloader.downloadFile(downloadUrl);
-                                        remember.add(fsid);
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                });
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    });
-                }
-                System.out.println(count++);
+                count = process(count, item);
             }
+        }
+    }
+
+    private int process(int count, Object item) {
+        JSONObject file = JSONUtil.parseObj(item);
+        String fsid = file.getStr("fsid");
+        if (!remember.hasRemember(fsid)) {
+            fetchDownloadUrlExecutorService.execute(() -> {
+                fetchAndDownload(fsid);
+            });
+        }
+        System.out.println(count++);
+        return count;
+    }
+
+    private void fetchAndDownload(String fsid) {
+        try {
+            String downloadUrl = downloader.fetchDownloadUrl(fsid);
+            if(downloadUrl == null) {
+                errorRemember.add(fsid);
+            } else {
+                downloadExecutorService.execute(() ->{
+                   download(fsid, downloadUrl);
+                });
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void download(String fsid, String downloadUrl) {
+        try {
+            downloader.downloadFile(downloadUrl);
+            remember.add(fsid);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
