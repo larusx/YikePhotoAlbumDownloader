@@ -11,7 +11,7 @@ import java.util.concurrent.Executors;
 /**
  * 获取游标
  */
-public class CursorTraverser {
+public class CursorTraverser implements Traverser {
 
     private static String traverseUrl = "https://photo.baidu.com/youai/file/v1/list?clienttype=70&need_thumbnail=1&need_filter_hidden=0";
 
@@ -72,6 +72,10 @@ public class CursorTraverser {
     private void process(Object item) {
         JSONObject file = JSONUtil.parseObj(item);
         String fsid = file.getStr("fsid");
+        processFsid(fsid);
+    }
+
+    private void processFsid(String fsid) {
         if (!remember.hasRemember(fsid)) {
             fetchDownloadUrlExecutorService.execute(() -> {
                 fetchAndDownload(fsid);
