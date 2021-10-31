@@ -61,12 +61,13 @@ public class CursorTraverser {
             hasMore = scrollResult.getInt("has_more") == 1;
             JSONArray scrollList = scrollResult.getJSONArray("list");
             for (Object item : scrollList) {
-                count = process(count, item);
+                process(item);
+                System.out.println(count++);
             }
         }
     }
 
-    private int process(int count, Object item) {
+    private void process(Object item) {
         JSONObject file = JSONUtil.parseObj(item);
         String fsid = file.getStr("fsid");
         if (!remember.hasRemember(fsid)) {
@@ -74,8 +75,6 @@ public class CursorTraverser {
                 fetchAndDownload(fsid);
             });
         }
-        System.out.println(count++);
-        return count;
     }
 
     private void fetchAndDownload(String fsid) {
