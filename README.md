@@ -18,9 +18,12 @@ public class Client {
         String bdstoken = "";
         // 目标路径
         String targetRootPath = "";
+        // 并发下载线程数
+        int threadCount = 40;
 
+        log.info("开始下载, 请关注日志。");
         new CursorTraverser(
-                40,
+                threadCount,
                 bdstoken,
                 cookie,
                 targetRootPath
