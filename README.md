@@ -2,9 +2,9 @@
 当前官方提供的页面选中下载只支持批量100张，如果照片很多的话下载很费劲，所以有了这个小工具。
 
 下载流程
-1. 登陆百度版的一刻相册。
-2. 拿到Cookie和bdstoken，下载的时候需要这两个参数。
-3. 配置好目标路径，所有图片会下载到这个路径
+1. 登陆网页版的[一刻相册](https://photo.baidu.com/photo/web/home)。
+2. 拿到Cookie和bdstoken，下载的时候需要这两个参数。![img.png](img.png)
+3. 配置好目标路径targetRootPath，所有图片会自动下载到这个路径。
 4. 运行Client的main方法就可以了。
 
 ```java
