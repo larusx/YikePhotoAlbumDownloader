@@ -3,7 +3,7 @@
 
 下载流程
 1. 登陆网页版的[一刻相册](https://photo.baidu.com/photo/web/home)。
-2. 拿到Cookie和bdstoken，下载的时候需要这两个参数。
+2. 拿到Cookie和bdstoken，下载的时候需要这两个参数。![img.png](img.png)
 3. 配置好目标路径targetRootPath，所有图片会自动下载到这个路径。
 4. 以上三个参数配置完，运行Client的main方法就可以了。
 
