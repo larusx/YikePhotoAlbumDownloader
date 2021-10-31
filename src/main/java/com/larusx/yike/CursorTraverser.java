@@ -50,7 +50,10 @@ public class CursorTraverser {
     }
 
     public void traverse() throws IOException {
-        int count = 0;
+        Counter<Object> counter = Counter
+                .wrap(this::process)
+                .messageTemplate("开始下载第%s个文件");
+
         while (hasMore) {
             String url = URLUtils.addBstoken(traverseUrl, bdstoken);
             if (cursor != null) {
@@ -61,8 +64,7 @@ public class CursorTraverser {
             hasMore = scrollResult.getInt("has_more") == 1;
             JSONArray scrollList = scrollResult.getJSONArray("list");
             for (Object item : scrollList) {
-                process(item);
-                System.out.println(count++);
+                counter.execute(item);
             }
         }
     }

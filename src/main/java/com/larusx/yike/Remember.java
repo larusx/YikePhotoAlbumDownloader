@@ -5,6 +5,7 @@ import com.google.common.collect.Sets;
 import com.google.common.io.CharSink;
 import com.google.common.io.FileWriteMode;
 import com.google.common.io.Files;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
 
+@Slf4j
 public class Remember {
 
     private CharSink charSink;
@@ -29,9 +31,12 @@ public class Remember {
         if (!file.exists()) {
             try {
                 file.createNewFile();
+                log.info(String.format("记录文件%s不存在，重新创建。", filePath));
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        } else {
+            log.info(String.format("记录文件%s已存在，直接加载。", filePath));
         }
         this.charSink = Files.asCharSink(file, Charset.defaultCharset(), FileWriteMode.APPEND);
         try {
@@ -45,6 +50,7 @@ public class Remember {
         runWithLock(() -> {
             try {
                 charSink.writeLines(Lists.newArrayList(line));
+                log.info(String.format("增加记录[%s]到记录文件[%s]", line, filePath));
             } catch (IOException e) {
                 e.printStackTrace();
             }
