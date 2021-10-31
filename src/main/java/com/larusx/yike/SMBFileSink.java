@@ -6,7 +6,7 @@ import java.io.InputStream;
 public class SMBFileSink extends AbstractFileSink {
 
     public SMBFileSink(String targetRootPath) {
-        super.targetRootPath = targetRootPath;
+        super(targetRootPath);
     }
 
     @Override

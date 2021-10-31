@@ -9,7 +9,7 @@ import java.io.InputStream;
 public class LocalFileSink extends AbstractFileSink {
 
     public LocalFileSink(String targetRootPath) {
-        super.targetRootPath = targetRootPath;
+        super(targetRootPath);
     }
 
     @Override

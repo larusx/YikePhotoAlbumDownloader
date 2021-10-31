@@ -8,6 +8,10 @@ public abstract class AbstractFileSink implements FileSink {
 
     protected String targetRootPath;
 
+    public AbstractFileSink(String targetRootPath) {
+        this.targetRootPath = targetRootPath;
+    }
+
     protected abstract void internalWrite(InputStream content, String filePath) throws IOException;
 
     @Override
